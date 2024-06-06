@@ -1,8 +1,18 @@
 # Deployment of Containerized Voting Application on Azure App Service using Docker and Azure Container Registry (ACR)
 
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Attribution](#attribution)
+- [Project Task: Deployment of Containerized Voting Application](#project-task-deployment-of-containerized-voting-application)
+- [Project Solution: Deployment of Containerized Voting Application using Azure CLI](#project-solution-deployment-of-containerized-voting-application-using-azure-cli)
+- [Conclusion](#conclusion)
+
 ## Introduction
 
 This is a simple Django-based web application that allows users to vote on various categories. Users can view available categories, vote for their favorite items in each category, and see the voting results in real-time. The application is containerized using Docker and deployed on Azure App Service using Azure Container Registry (ACR). The application is built using Django, a high-level Python web framework that encourages rapid development and clean, pragmatic design.
+
+![Voting Application Screenshot](./.img/homepage.png)
 
 ## Attribution
 
@@ -62,6 +72,8 @@ Successfully deploying the voting application ensures that it is containerized, 
 
 **Solution Overview**:
 The solution involves three main stages: containerizing the application, pushing the Docker image to Azure Container Registry (ACR), and deploying the application using Azure App Service.
+
+![Voting Application Deployment Flow](./.img/voterArchi.jpg)
 
 **Implementation Steps**:
 
@@ -240,3 +252,7 @@ The solution involves three main stages: containerizing the application, pushing
 
 **Outcome**:
 The containerized voting application is successfully deployed on Azure. The solution ensures a scalable and manageable deployment, leveraging Azure's infrastructure for reliability and performance. By using ACR for Docker image storage and Azure App Service for hosting, the application benefits from streamlined deployment processes and automated updates.
+
+## Conclusion
+
+The deployment of the containerized voting application on Azure App Service using Docker and Azure Container Registry (ACR) demonstrates the power of cloud-based solutions for application hosting. By containerizing the application, storing the Docker image in ACR, and deploying it on App Service, we create a scalable and reliable environment for running the application. Leveraging Azure's cloud infrastructure simplifies the deployment process and ensures efficient management of the application. This project showcases the benefits of using cloud services for deploying and hosting applications, enabling developers to focus on building and improving their applications without worrying about infrastructure management.
