@@ -40,9 +40,9 @@ jobs:
           docker login ${{ env.REGISTRY_NAME }}.azurecr.io -u ${{ env.REGISTRY_NAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
           docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-      # - name: Restart webapp
-      #   run: |
-      #     az webapp restart --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.WEBAPP_RESOURCE_GROUP }}
+      - name: Restart webapp
+        run: |
+          az webapp restart --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.WEBAPP_RESOURCE_GROUP }}
 
       - name: logout
         run: |

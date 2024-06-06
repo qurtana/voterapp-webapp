@@ -186,31 +186,56 @@ The solution involves three main stages: containerizing the application, pushing
      - Set up continuous deployment using GitHub Actions to automate future deployments.
 
        ```yaml
-       name: Deploy to Azure Web App
-       on:
-         push:
-           branches:
-             - main
-       jobs:
-         build-and-deploy:
-           runs-on: ubuntu-latest
-           steps:
-             - name: Checkout code
-               uses: actions/checkout@v2
+        name: deploy-container
 
-             - name: Login to Azure
-               uses: azure/login@v1
-               with:
-                 creds: ${{ secrets.AZURE_CREDENTIALS }}
+        on:
+          push:
+            branches:
+              - main
+            paths:
+              - 'app/**'
 
-             - name: Build and Push Docker Image
-               run: |
-                 docker build -t myACR.azurecr.io/voting-app:${{ github.sha }} .
-                 docker push myACR.azurecr.io/voting-app:${{ github.sha }}
+        permissions:
+          id-token: write
+          contents: read
 
-             - name: Deploy to Azure Web App
-               run: |
-                 az webapp config container set --name myVotingApp --resource-group myResourceGroup --docker-custom-image-name myACR.azurecr.io/voting-app:${{ github.sha }}
+        env:
+          REGISTRY_NAME: 'voterapp'
+          IMAGE_NAME: 'voter-app'
+          IMAGE_TAG: 'django'
+          WEBAPP_NAME: 'voterapp818032'
+          WEBAPP_RESOURCE_GROUP: 'voterapp'
+
+
+        jobs:
+          build:
+            runs-on: ubuntu-latest
+
+            steps:
+              - name: Checkout
+                uses: actions/checkout@v4
+
+              - name: Azure Login
+                uses: Azure/login@v2.1.0
+                with:
+                  client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                  tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                  subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+              - name: Build and push Docker image
+                run: |
+                  docker-compose -f app/docker-compose.yml build
+                  docker login ${{ env.REGISTRY_NAME }}.azurecr.io -u ${{ env.REGISTRY_NAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
+                  docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+              - name: Restart webapp
+                run: |
+                  az webapp restart --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.WEBAPP_RESOURCE_GROUP }}
+
+              - name: logout
+                run: |
+                  az logout
+                if: always()
        ```
 
 **Outcome**:
