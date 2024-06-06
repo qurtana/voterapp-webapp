@@ -1,0 +1,12 @@
+version: "3.11"
+
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    image: voterapp.azurecr.io/voter-app:django
+    container_name: voter-app
+    command: python manage.py runserver 0.0.0.0:8000
